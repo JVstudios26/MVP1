@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Panel del negocio — Membresía de Barrio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#10182B;
+    --navy-800:#1B2A4A;
+    --navy-700:#243356;
+    --gold-500:#E8A33D;
+    --gold-300:#F4C97A;
+    --coral-500:#E4572E;
+    --cream-100:#F5EFE3;
+    --cream-200:#E9E2D2;
+    --ink-900:#10131C;
+    --ok-green:#4CA771;
+    --warn-red:#E4572E;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--navy-950);
+    color:var(--cream-100);
+    font-family:'Inter',sans-serif;
+    padding:28px 16px 60px;
+  }
+  .wrap{ max-width:920px; margin:0 auto; }
+
+  header{ margin-bottom:26px; }
+  .marca{ font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:0.14em; color:var(--gold-500); margin:0 0 4px;}
+  h1{ font-family:'Bebas Neue',sans-serif; font-size:34px; margin:0; }
+  .sub{ opacity:0.7; font-size:14px; margin-top:8px; }
+
+  .tarjetas-resumen{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:12px; margin-bottom:28px;
+  }
+  .tarjeta{ background:var(--navy-800); border:1px solid #2C3D66; border-radius:14px; padding:16px; }
+  .tarjeta .num{ font-family:'Bebas Neue',sans-serif; font-size:30px; color:var(--gold-300); }
+  .tarjeta .lbl{ font-size:12px; opacity:0.7; margin-top:2px; }
+
+  .bloque{
+    background:var(--navy-800);
+    border:1px solid #2C3D66;
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:22px;
+  }
+  .bloque h2{ font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.03em; margin:0 0 14px; color:var(--cream-100); }
+
+  .fila-form{ display:flex; flex-wrap:wrap; gap:10px; }
+  .fila-form .campo{ flex:1 1 150px; }
+  label{ display:block; font-size:12.5px; margin-bottom:6px; opacity:0.75; }
+  input{
+    width:100%; padding:11px 12px; border-radius:10px;
+    border:1px solid #33456F; background:var(--navy-950);
+    color:var(--cream-100); font-size:14.5px; font-family:'Inter',sans-serif;
+  }
+  input::placeholder{ color:#8391B5; }
+
+  .btn{
+    padding:11px 18px; border-radius:10px; border:none; cursor:pointer;
+    font-family:'Bebas Neue',sans-serif; letter-spacing:0.04em; font-size:15px;
+  }
+  .btn-coral{ background:var(--coral-500); color:var(--cream-100); }
+  .btn-gold{ background:var(--gold-500); color:var(--ink-900); }
+  .btn-fila{ display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+
+  .mensaje{ margin-top:12px; padding:10px 12px; border-radius:9px; font-size:13.5px; }
+  .mensaje.error{ background:rgba(228,87,46,0.16); color:#FF9270; }
+  .mensaje.ok{ background:rgba(76,167,113,0.16); color:#7ED9A2; }
+
+  table{ width:100%; border-collapse:collapse; font-size:13.5px; margin-top:6px;}
+  th{ text-align:left; padding:9px 8px; color:var(--cream-200); opacity:0.7; font-weight:600; border-bottom:1px solid #33456F; font-size:12px;}
+  td{ padding:10px 8px; border-bottom:1px solid #22304F; }
+  tr:last-child td{ border-bottom:none; }
+  .badge-nivel{
+    display:inline-block; padding:3px 9px; border-radius:99px; font-size:11px;
+    font-family:'Bebas Neue',sans-serif; letter-spacing:0.04em;
+    background:var(--gold-500); color:var(--ink-900);
+  }
+  .alerta-inactivo{ color:var(--warn-red); font-size:12px; }
+  .busqueda{ margin-bottom:14px; }
+  .vacio{ opacity:0.6; font-size:13.5px; padding:14px 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="marca">PANEL DEL NEGOCIO</p>
+    <h1>Tus clientes fijos, en un solo lugar</h1>
+    <p class="sub">Registra visitas, revisa niveles y detecta a tiempo quién ha dejado de venir.</p>
+  </header>
+
+  <div class="tarjetas-resumen">
+    <div class="tarjeta"><div class="num" id="resumen-total">—</div><div class="lbl">Clientes activos</div></div>
+    <div class="tarjeta"><div class="num" id="resumen-mes">—</div><div class="lbl">Visitas este mes</div></div>
+    <div class="tarjeta"><div class="num" id="resumen-riesgo">—</div><div class="lbl">Sin venir hace 45+ días</div></div>
+  </div>
+
+  <div class="bloque">
+    <h2>Registrar una visita</h2>
+    <div class="fila-form">
+      <div class="campo">
+        <label for="visita-telefono">Celular del cliente</label>
+        <input id="visita-telefono" type="tel" placeholder="3007654321" />
+      </div>
+      <div class="campo">
+        <label for="visita-servicio">Servicio</label>
+        <input id="visita-servicio" type="text" placeholder="Corte, barba, color…" />
+      </div>
+      <div class="campo">
+        <label for="visita-monto">Monto cobrado</label>
+        <input id="visita-monto" type="number" placeholder="20000" />
+      </div>
+    </div>
+    <div class="btn-fila">
+      <button class="btn btn-coral" onclick="registrarVisita()">Registrar visita</button>
+    </div>
+    <div id="mensaje-visita"></div>
+  </div>
+
+  <div class="bloque">
+    <h2>Nueva membresía</h2>
+    <div class="fila-form">
+      <div class="campo">
+        <label for="nuevo-nombre">Nombre</label>
+        <input id="nuevo-nombre" type="text" placeholder="Nombre del cliente" />
+      </div>
+      <div class="campo">
+        <label for="nuevo-telefono">Celular</label>
+        <input id="nuevo-telefono" type="tel" placeholder="3007654321" />
+      </div>
+    </div>
+    <div class="btn-fila">
+      <button class="btn btn-gold" onclick="crearCliente()">Activar membresía</button>
+    </div>
+    <div id="mensaje-nuevo"></div>
+  </div>
+
+  <div class="bloque">
+    <h2>Lista de clientes</h2>
+    <div class="busqueda">
+      <input id="buscar" type="text" placeholder="Buscar por nombre o celular…" oninput="filtrarTabla()" />
+    </div>
+    <div id="contenedor-tabla">
+      <p class="vacio">Cargando clientes…</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Pega aquí la URL de tu implementación de Apps Script (/exec)
+  const API_URL = "https://script.google.com/macros/s/AKfycbx_BxbCNJBlpGXbGnH190ijaaehkCHlC9ft1e5BjE7MFrc-XH8IvnF5UePAJyCJn-0A/exec";
+  let clientesCache = [];
+
+  async function llamarAPI(params){
+    const url = new URL(API_URL);
+    Object.keys(params).forEach(k => url.searchParams.set(k, params[k]));
+    const resp = await fetch(url.toString());
+    return resp.json();
+  }
+
+  function mensaje(idContenedor, texto, tipo){
+    document.getElementById(idContenedor).innerHTML = `<div class="mensaje ${tipo}">${texto}</div>`;
+  }
+
+  async function cargarClientes(){
+    try{
+      const data = await llamarAPI({ action:'listar' });
+      if(!data.ok){ document.getElementById('contenedor-tabla').innerHTML = '<p class="vacio">No pudimos cargar los clientes.</p>'; return; }
+      clientesCache = data.clientes;
+      pintarResumen(clientesCache);
+      pintarTabla(clientesCache);
+    }catch(err){
+      document.getElementById('contenedor-tabla').innerHTML = '<p class="vacio">No pudimos conectar con la base de datos.</p>';
+    }
+  }
+
+  function diasDesde(fechaISO){
+    if(!fechaISO) return null;
+    const diffMs = new Date() - new Date(fechaISO);
+    return Math.floor(diffMs / (1000*60*60*24));
+  }
+
+  function pintarResumen(clientes){
+    document.getElementById('resumen-total').textContent = clientes.length;
+
+    const esteMes = new Date().getMonth();
+    const esteAnio = new Date().getFullYear();
+    let visitasMes = 0;
+    let enRiesgo = 0;
+    clientes.forEach(c => {
+      const dias = diasDesde(c.ultimaVisita);
+      if(dias !== null && dias >= 45) enRiesgo++;
+      if(c.ultimaVisita){
+        const f = new Date(c.ultimaVisita);
+        if(f.getMonth() === esteMes && f.getFullYear() === esteAnio) visitasMes++;
+      }
+    });
+    document.getElementById('resumen-mes').textContent = visitasMes;
+    document.getElementById('resumen-riesgo').textContent = enRiesgo;
+  }
+
+  function pintarTabla(clientes){
+    if(!clientes.length){
+      document.getElementById('contenedor-tabla').innerHTML = '<p class="vacio">Aún no hay clientes registrados.</p>';
+      return;
+    }
+    let filas = clientes.map(c => {
+      const dias = diasDesde(c.ultimaVisita);
+      const alerta = (dias !== null && dias >= 45) ? `<div class="alerta-inactivo">${dias} días sin venir</div>` : '';
+      return `<tr>
+        <td>${c.nombre}<br><span style="opacity:.55">${c.telefono}</span></td>
+        <td><span class="badge-nivel">${c.nivel}</span></td>
+        <td>${c.descuento}%</td>
+        <td>${c.numVisitas}</td>
+        <td>${c.ultimaVisita ? new Date(c.ultimaVisita).toLocaleDateString('es-CO') : '—'}${alerta}</td>
+      </tr>`;
+    }).join('');
+
+    document.getElementById('contenedor-tabla').innerHTML = `
+      <table>
+        <thead><tr><th>Cliente</th><th>Nivel</th><th>Descuento</th><th>Visitas</th><th>Última visita</th></tr></thead>
+        <tbody>${filas}</tbody>
+      </table>`;
+  }
+
+  function filtrarTabla(){
+    const q = document.getElementById('buscar').value.trim().toLowerCase();
+    const filtrados = clientesCache.filter(c =>
+      c.nombre.toLowerCase().includes(q) || c.telefono.includes(q)
+    );
+    pintarTabla(filtrados);
+  }
+
+  async function registrarVisita(){
+    const telefono = document.getElementById('visita-telefono').value.trim();
+    const servicio = document.getElementById('visita-servicio').value.trim();
+    const monto = document.getElementById('visita-monto').value.trim();
+    if(!telefono){ mensaje('mensaje-visita','Escribe el celular del cliente.','error'); return; }
+    try{
+      const data = await llamarAPI({ action:'visita', telefono, servicio, monto });
+      if(!data.ok){ mensaje('mensaje-visita', data.error, 'error'); return; }
+      mensaje('mensaje-visita', `Visita registrada para ${data.nombre} — nivel ${data.nivel}.`, 'ok');
+      document.getElementById('visita-telefono').value = '';
+      document.getElementById('visita-servicio').value = '';
+      document.getElementById('visita-monto').value = '';
+      cargarClientes();
+    }catch(err){
+      mensaje('mensaje-visita','No pudimos conectar. Intenta de nuevo.','error');
+    }
+  }
+
+  async function crearCliente(){
+    const nombre = document.getElementById('nuevo-nombre').value.trim();
+    const telefono = document.getElementById('nuevo-telefono').value.trim();
+    if(!nombre || !telefono){ mensaje('mensaje-nuevo','Completa nombre y celular.','error'); return; }
+    try{
+      const data = await llamarAPI({ action:'registrar', nombre, telefono });
+      if(!data.ok){ mensaje('mensaje-nuevo', data.error, 'error'); return; }
+      mensaje('mensaje-nuevo', `Membresía activada para ${data.nombre}.`, 'ok');
+      document.getElementById('nuevo-nombre').value = '';
+      document.getElementById('nuevo-telefono').value = '';
+      cargarClientes();
+    }catch(err){
+      mensaje('mensaje-nuevo','No pudimos conectar. Intenta de nuevo.','error');
+    }
+  }
+
+  cargarClientes();
+</script>
+</body>
+</html>
