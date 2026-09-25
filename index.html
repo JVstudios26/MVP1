@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Membresía de Barrio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#10182B;
+    --navy-800:#1B2A4A;
+    --navy-700:#243356;
+    --gold-500:#E8A33D;
+    --gold-300:#F4C97A;
+    --coral-500:#E4572E;
+    --cream-100:#F5EFE3;
+    --cream-200:#E9E2D2;
+    --ink-900:#10131C;
+    --ok-green:#4CA771;
+    --radius-card: 22px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--navy-950);
+    color:var(--cream-100);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 64px;
+  }
+  .wrap{ width:100%; max-width:440px; }
+
+  /* ---- Encabezado ---- */
+  header{ margin-bottom:28px; }
+  .marca{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:15px;
+    letter-spacing:0.14em;
+    color:var(--gold-500);
+    margin:0 0 6px;
+  }
+  h1{
+    font-family:'Bebas Neue', sans-serif;
+    font-size:40px;
+    line-height:1.02;
+    margin:0;
+    color:var(--cream-100);
+  }
+  .sub{
+    color:var(--cream-200);
+    opacity:0.75;
+    font-size:14.5px;
+    margin-top:10px;
+    line-height:1.5;
+  }
+
+  /* ---- Carné digital ---- */
+  .carne{
+    position:relative;
+    border-radius:var(--radius-card);
+    background:linear-gradient(155deg, var(--navy-800) 0%, var(--navy-950) 78%);
+    padding:26px 24px 22px;
+    overflow:hidden;
+    border:1px solid #2C3D66;
+    box-shadow:0 18px 40px -18px rgba(0,0,0,0.6);
+  }
+  .carne::before{
+    content:"";
+    position:absolute;
+    top:-40%; right:-28%;
+    width:220px; height:220px;
+    background:conic-gradient(from 45deg, var(--coral-500) 0 12%, transparent 0 25%, var(--coral-500) 0 37%, transparent 0 50%, var(--coral-500) 0 62%, transparent 0 75%, var(--coral-500) 0 87%, transparent 0 100%);
+    opacity:0.12;
+    border-radius:50%;
+  }
+  .carne-top{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    position:relative; z-index:1;
+  }
+  .carne-marca{ font-family:'Bebas Neue',sans-serif; letter-spacing:0.1em; font-size:13px; color:var(--cream-200); opacity:0.7;}
+  .nivel-badge{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:13px;
+    letter-spacing:0.06em;
+    padding:5px 12px 4px;
+    border-radius:99px;
+    background:var(--gold-500);
+    color:var(--ink-900);
+  }
+  .carne-nombre{
+    font-size:22px;
+    font-weight:700;
+    margin:22px 0 2px;
+    position:relative; z-index:1;
+  }
+  .carne-tel{ font-size:13.5px; opacity:0.6; position:relative; z-index:1;}
+
+  .carne-metrics{
+    display:flex; gap:22px;
+    margin-top:22px;
+    position:relative; z-index:1;
+  }
+  .metric .num{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:34px;
+    color:var(--gold-300);
+    line-height:1;
+  }
+  .metric .lbl{ font-size:11.5px; opacity:0.65; margin-top:4px; }
+
+  .carne-descuento{
+    margin-top:24px;
+    padding-top:18px;
+    border-top:1px dashed #33456F;
+    display:flex; justify-content:space-between; align-items:center;
+    position:relative; z-index:1;
+  }
+  .desc-num{ font-family:'Bebas Neue',sans-serif; font-size:30px; color:var(--coral-500);}
+  .desc-lbl{ font-size:12.5px; opacity:0.7; max-width:180px; line-height:1.35;}
+
+  /* ---- Código de invitado ---- */
+  .invitado-box{
+    margin-top:16px;
+    background:var(--navy-700);
+    border-radius:14px;
+    padding:14px 16px;
+  }
+  .invitado-box .t{ font-size:12px; opacity:0.7; margin-bottom:6px;}
+  .invitado-fila{ display:flex; justify-content:space-between; align-items:center; gap:10px;}
+  .codigo{ font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:0.06em; color:var(--cream-100);}
+  .btn-compartir{
+    background:var(--gold-500);
+    color:var(--ink-900);
+    border:none;
+    border-radius:10px;
+    padding:9px 14px;
+    font-weight:700;
+    font-size:13px;
+    cursor:pointer;
+  }
+
+  /* ---- Formularios ---- */
+  .panel{ margin-top:26px; }
+  .campo{ margin-bottom:14px; }
+  label{ display:block; font-size:13px; margin-bottom:6px; color:var(--cream-200); opacity:0.85;}
+  input{
+    width:100%;
+    padding:13px 14px;
+    border-radius:12px;
+    border:1px solid #33456F;
+    background:var(--navy-800);
+    color:var(--cream-100);
+    font-size:15px;
+    font-family:'Inter',sans-serif;
+  }
+  input::placeholder{ color:#8391B5; }
+  input:focus{ outline:2px solid var(--gold-500); outline-offset:1px; }
+
+  .btn-principal{
+    width:100%;
+    padding:14px;
+    border-radius:12px;
+    border:none;
+    background:var(--coral-500);
+    color:var(--cream-100);
+    font-family:'Bebas Neue',sans-serif;
+    letter-spacing:0.05em;
+    font-size:17px;
+    cursor:pointer;
+    margin-top:6px;
+  }
+  .btn-principal:disabled{ opacity:0.55; cursor:default; }
+  .link-secundario{
+    display:block;
+    text-align:center;
+    margin-top:14px;
+    font-size:13.5px;
+    color:var(--gold-300);
+    background:none; border:none; cursor:pointer;
+    text-decoration:underline;
+  }
+
+  .mensaje{
+    margin-top:14px;
+    padding:11px 13px;
+    border-radius:10px;
+    font-size:13.5px;
+    line-height:1.4;
+  }
+  .mensaje.error{ background:rgba(228,87,46,0.16); color:#FF9270; }
+  .mensaje.ok{ background:rgba(76,167,113,0.16); color:#7ED9A2; }
+
+  .oculto{ display:none !important; }
+
+  .niveles-info{
+    margin-top:30px;
+    font-size:12.5px;
+    opacity:0.6;
+    line-height:1.6;
+  }
+  .niveles-info b{ color:var(--cream-100); opacity:1;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="marca">CLUB DEL BARRIO</p>
+    <h1>Tu membresía de toda la vida</h1>
+    <p class="sub">Activa tu carné, acumula nivel con cada visita y comparte el beneficio con tu familia.</p>
+  </header>
+
+  <!-- ===== PASO 1: acceso ===== -->
+  <section id="vista-acceso" class="panel">
+    <div class="campo">
+      <label for="input-telefono-login">Tu número de celular</label>
+      <input id="input-telefono-login" type="tel" inputmode="numeric" placeholder="Ej: 3007654321" />
+    </div>
+    <button class="btn-principal" onclick="consultarMembresia()">Ver mi carné</button>
+    <button class="link-secundario" onclick="mostrarRegistro()">Aún no tengo membresía — activarla</button>
+    <div id="mensaje-acceso"></div>
+  </section>
+
+  <!-- ===== PASO 1b: registro ===== -->
+  <section id="vista-registro" class="panel oculto">
+    <div class="campo">
+      <label for="input-nombre">Nombre completo</label>
+      <input id="input-nombre" type="text" placeholder="Ej: Camila Torres" />
+    </div>
+    <div class="campo">
+      <label for="input-telefono-registro">Número de celular</label>
+      <input id="input-telefono-registro" type="tel" inputmode="numeric" placeholder="Ej: 3007654321" />
+    </div>
+    <div class="campo">
+      <label for="input-referido">Código de un amigo o familiar (opcional)</label>
+      <input id="input-referido" type="text" placeholder="Ej: CAMI7654" />
+    </div>
+    <button class="btn-principal" onclick="registrarMembresia()">Activar mi membresía</button>
+    <button class="link-secundario" onclick="mostrarAcceso()">Ya tengo membresía — ingresar</button>
+    <div id="mensaje-registro"></div>
+  </section>
+
+  <!-- ===== PASO 2: carné ===== -->
+  <section id="vista-carne" class="panel oculto">
+    <div class="carne">
+      <div class="carne-top">
+        <span class="carne-marca">CARNÉ DIGITAL</span>
+        <span class="nivel-badge" id="carne-nivel">BRONCE</span>
+      </div>
+      <div class="carne-nombre" id="carne-nombre">—</div>
+      <div class="carne-tel" id="carne-tel">—</div>
+
+      <div class="carne-metrics">
+        <div class="metric">
+          <div class="num" id="carne-visitas">0</div>
+          <div class="lbl">Visitas registradas</div>
+        </div>
+        <div class="metric">
+          <div class="num" id="carne-meses">0</div>
+          <div class="lbl">Meses en el club</div>
+        </div>
+      </div>
+
+      <div class="carne-descuento">
+        <div class="desc-num" id="carne-descuento">10%</div>
+        <div class="desc-lbl">de descuento en cada corte o tratamiento, por tu nivel actual</div>
+      </div>
+    </div>
+
+    <div class="invitado-box">
+      <div class="t">Comparte este código con familia o amigos — ellos reciben 10% de descuento al mencionarlo</div>
+      <div class="invitado-fila">
+        <span class="codigo" id="carne-codigo-invitado">—</span>
+        <button class="btn-compartir" onclick="compartirCodigo()">Compartir</button>
+      </div>
+    </div>
+
+    <button class="link-secundario" onclick="mostrarAcceso()">Consultar con otro número</button>
+
+    <p class="niveles-info">
+      Niveles del club — <b>Bronce</b> (10%) desde que activas tu carné, <b>Plata</b> (15%) a los 3 meses,
+      <b>Oro</b> (20%) a los 6 meses y <b>Diamante</b> (25%) al año de estar suscrito. Entre más tiempo te quedas, más recibes.
+    </p>
+  </section>
+
+</div>
+
+<script>
+  // Pega aquí la URL de tu implementación de Apps Script (/exec)
+  const API_URL = "https://script.google.com/macros/s/AKfycbx_BxbCNJBlpGXbGnH190ijaaehkCHlC9ft1e5BjE7MFrc-XH8IvnF5UePAJyCJn-0A/exec";
+
+  function mostrarAcceso(){
+    document.getElementById('vista-registro').classList.add('oculto');
+    document.getElementById('vista-carne').classList.add('oculto');
+    document.getElementById('vista-acceso').classList.remove('oculto');
+  }
+  function mostrarRegistro(){
+    document.getElementById('vista-acceso').classList.add('oculto');
+    document.getElementById('vista-registro').classList.remove('oculto');
+  }
+
+  function mensaje(idContenedor, texto, tipo){
+    const el = document.getElementById(idContenedor);
+    el.innerHTML = `<div class="mensaje ${tipo}">${texto}</div>`;
+  }
+
+  async function llamarAPI(params){
+    const url = new URL(API_URL);
+    Object.keys(params).forEach(k => url.searchParams.set(k, params[k]));
+    const resp = await fetch(url.toString());
+    return resp.json();
+  }
+
+  async function consultarMembresia(){
+    const telefono = document.getElementById('input-telefono-login').value.trim();
+    if(!telefono){ mensaje('mensaje-acceso','Escribe tu número de celular.','error'); return; }
+    mensaje('mensaje-acceso','Buscando tu carné…','ok');
+    try{
+      const data = await llamarAPI({ action:'consultar', telefono });
+      if(!data.ok){ mensaje('mensaje-acceso', data.error,'error'); return; }
+      pintarCarne(data);
+      localStorage.setItem('membresia_telefono', telefono);
+      document.getElementById('vista-acceso').classList.add('oculto');
+      document.getElementById('vista-carne').classList.remove('oculto');
+    }catch(err){
+      mensaje('mensaje-acceso','No pudimos conectar. Intenta de nuevo.','error');
+    }
+  }
+
+  async function registrarMembresia(){
+    const nombre = document.getElementById('input-nombre').value.trim();
+    const telefono = document.getElementById('input-telefono-registro').value.trim();
+    const referidoPor = document.getElementById('input-referido').value.trim();
+    if(!nombre || !telefono){ mensaje('mensaje-registro','Completa tu nombre y celular.','error'); return; }
+    mensaje('mensaje-registro','Activando tu membresía…','ok');
+    try{
+      const data = await llamarAPI({ action:'registrar', nombre, telefono, referidoPor });
+      if(!data.ok){ mensaje('mensaje-registro', data.error,'error'); return; }
+      pintarCarne(data);
+      localStorage.setItem('membresia_telefono', telefono);
+      document.getElementById('vista-registro').classList.add('oculto');
+      document.getElementById('vista-carne').classList.remove('oculto');
+    }catch(err){
+      mensaje('mensaje-registro','No pudimos conectar. Intenta de nuevo.','error');
+    }
+  }
+
+  function pintarCarne(data){
+    document.getElementById('carne-nombre').textContent = data.nombre;
+    document.getElementById('carne-tel').textContent = data.telefono;
+    document.getElementById('carne-nivel').textContent = data.nivel.toUpperCase();
+    document.getElementById('carne-visitas').textContent = data.numVisitas;
+    document.getElementById('carne-meses').textContent = data.mesesActivo;
+    document.getElementById('carne-descuento').textContent = data.descuento + '%';
+    document.getElementById('carne-codigo-invitado').textContent = data.codigoInvitado;
+  }
+
+  function compartirCodigo(){
+    const codigo = document.getElementById('carne-codigo-invitado').textContent;
+    const nombre = document.getElementById('carne-nombre').textContent;
+    const texto = `${nombre} te invita a su club de barbería/salón favorito. Menciona el código ${codigo} y recibe 10% de descuento en tu próxima visita.`;
+    if(navigator.share){
+      navigator.share({ text: texto }).catch(()=>{});
+    }else{
+      window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
+    }
+  }
+
+  // Si ya consultó antes en este dispositivo, prellenar el número
+  window.addEventListener('DOMContentLoaded', () => {
+    const guardado = localStorage.getItem('membresia_telefono');
+    if(guardado){ document.getElementById('input-telefono-login').value = guardado; }
+  });
+</script>
+</body>
+</html>
